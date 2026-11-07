@@ -20,8 +20,7 @@ import reportsRouter from './routes/reports';
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// ── Middleware ────────────────────────────────────────────
-// Allow multiple origins — local dev + production frontend
+// ── CORS ─────────────────────────────────────────────────────
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:3001',
@@ -36,10 +35,11 @@ app.use(cors({
   },
   credentials: true,
 }));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// ── Routes ────────────────────────────────────────────────
+// ── Routes ────────────────────────────────────────────────────
 app.use('/api/auth', authRouter);
 app.use('/api/books', booksRouter);
 app.use('/api/categories', categoriesRouter);
@@ -55,7 +55,7 @@ app.use('/api/reports', reportsRouter);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
-// ── Error handler (must be last) ──────────────────────────
+// ── Error handler (must be last) ──────────────────────────────
 app.use(errorHandler);
 
 app.listen(PORT, () => {
