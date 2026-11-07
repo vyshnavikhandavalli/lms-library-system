@@ -4,3 +4,5 @@ dist/
 .env.production
 npm-debug.log*
 yarn-debug.log*
+.vercel
+.env*
