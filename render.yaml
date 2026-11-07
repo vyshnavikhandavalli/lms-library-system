@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: lms-backend
+    runtime: node
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate && npm run build && npx prisma migrate deploy
+    startCommand: node dist/server.js
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_6WmqpC1PMEdD@ep-weathered-wildflower-b3ho9x7j.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
+      - key: JWT_SECRET
+        value: lms_jwt_secret_key_x7k2mP9qL4nR8wZ3vB6yH1jF5sA0cE
+      - key: JWT_REFRESH_SECRET
+        value: lms_refresh_secret_m3nQ8pT1aW6xK4rV9bG2uL5hD0yJ7f
+      - key: JWT_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://lms-library-system.vercel.app
+      - key: PORT
+        value: "5001"
