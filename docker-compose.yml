@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+
+  # ── PostgreSQL Database ──────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: lms_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lms_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lms_secure_pass_2026
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d lms_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ── Backend API ──────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lms_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:lms_secure_pass_2026@db:5432/lms_db?schema=public
+      JWT_SECRET: lms_jwt_secret_key_x7k2mP9qL4nR8wZ3vB6yH1jF5sA0cE
+      JWT_REFRESH_SECRET: lms_refresh_secret_m3nQ8pT1aW6xK4rV9bG2uL5hD0yJ7f
+      JWT_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 7d
+      NODE_ENV: production
+      PORT: 5001
+      FRONTEND_URL: http://localhost:3001
+    ports:
+      - "5001:5001"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── Seed Job (runs once, then exits) ─────────────────────────
+  seed:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lms_seed
+    environment:
+      DATABASE_URL: postgresql://postgres:lms_secure_pass_2026@db:5432/lms_db?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma migrate deploy && npx ts-node src/prisma/seed.ts"
+    restart: "no"
+
+  # ── Frontend ─────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:5001
+    container_name: lms_frontend
+    restart: unless-stopped
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+    driver: local
