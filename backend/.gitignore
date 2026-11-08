@@ -5,5 +5,5 @@ dist/
 *.db
 *.sqlite
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Do NOT ignore generated prisma client — needed for Railway deploy
+# node_modules/.prisma is committed intentionally

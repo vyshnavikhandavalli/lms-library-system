@@ -1,0 +1,1 @@
+{"version":3,"file":"activityLog.d.ts","sourceRoot":"","sources":["../../src/lib/activityLog.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,MAAM,EAAE,MAAM,gBAAgB,CAAC;AAExC,wBAAsB,WAAW,CAC/B,OAAO,EAAE,MAAM,EACf,MAAM,EAAE,MAAM,EACd,UAAU,EAAE,MAAM,EAClB,QAAQ,CAAC,EAAE,MAAM,EACjB,OAAO,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,OAAO,CAAC,EACjC,SAAS,CAAC,EAAE,MAAM;;;;;;;;;GAQnB"}

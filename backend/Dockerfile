@@ -40,4 +40,4 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 5001
 
 # Default command: migrate + start server
-CMD sh -c "npx prisma migrate deploy && node dist/server.js"
+CMD sh -c "node dist/server.js"

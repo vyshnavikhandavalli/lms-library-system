@@ -10,7 +10,4 @@ echo "==> Generating Prisma client..."
 echo "==> Compiling TypeScript..."
 ./node_modules/.bin/tsc
 
-echo "==> Running database migrations..."
-./node_modules/.bin/prisma migrate deploy
-
 echo "==> Build complete!"
